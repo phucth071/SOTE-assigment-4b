@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Numerics; // Thêm namespace này
 
 namespace Buoi07_TinhToan3
 {
