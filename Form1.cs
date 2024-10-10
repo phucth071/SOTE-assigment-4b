@@ -36,15 +36,40 @@ namespace Buoi07_TinhToan3
         {
             //lấy giá trị của 2 ô số
             double so1, so2, kq = 0;
-            so1 = double.Parse(txtSo1.Text);
+            if (!double.TryParse(txtSo1.Text, out so1))
+            {
+                MessageBox.Show("Số thứ nhất không hợp lệ");
+                txtSo1.Focus();
+                return;
+            }
+            if (!double.TryParse(txtSo2.Text, out so2))
+            {
+                MessageBox.Show("Số thứ hai không hợp lệ");
+                txtSo2.Focus();
+                return;
+            }
             so2 = double.Parse(txtSo2.Text);
             //Thực hiện phép tính dựa vào phép toán được chọn
             if (radCong.Checked) kq = so1 + so2;
             else if (radTru.Checked) kq = so1 - so2;
             else if (radNhan.Checked) kq = so1 * so2;
-            else if (radChia.Checked && so2 != 0) kq = so1 / so2;
+            else if (radChia.Checked)
+            {
+                if (so2 == 0)
+                {
+                    MessageBox.Show("Số chia phải khác 0");
+                    txtSo2.Focus();
+                    return;
+                }
+                kq = so1 / so2;
+            }
             //Hiển thị kết quả lên trên ô kết quả
             txtKq.Text = kq.ToString();
+        }
+
+        private void txtSo1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
