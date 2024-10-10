@@ -35,17 +35,40 @@ namespace Buoi07_TinhToan3
 
         private void btnTinh_Click(object sender, EventArgs e)
         {
-            //lấy giá trị của 2 ô số
             double so1, so2, kq = 0;
-            so1 = double.Parse(txtSo1.Text);
-            so2 = double.Parse(txtSo2.Text);
-            //Thực hiện phép tính dựa vào phép toán được chọn
+
+            // Kiểm tra nếu số nhập vào vượt quá giới hạn của kiểu double
+            if (!double.TryParse(txtSo1.Text, out so1))
+            {
+                MessageBox.Show("Nhập vào số quá lớn!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtSo1.Focus();
+                return;
+            }
+            if (!double.TryParse(txtSo2.Text, out so2))
+            {
+                MessageBox.Show("Nhập vào số quá lớn!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtSo2.Focus();
+                return;
+            }
+
+
+            // Thực hiện phép tính dựa vào phép toán được chọn
             if (radCong.Checked) kq = so1 + so2;
             else if (radTru.Checked) kq = so1 - so2;
             else if (radNhan.Checked) kq = so1 * so2;
             else if (radChia.Checked && so2 != 0) kq = so1 / so2;
-            //Hiển thị kết quả lên trên ô kết quả
-            txtKq.Text = kq.ToString();
+
+            // Hiển thị kết quả
+            if (double.IsInfinity(kq))
+            {
+                MessageBox.Show("Kết quả vượt quá giới hạn tính toán!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtKq.Text = "∞";
+            }
+            else
+            {
+                txtKq.Text = kq.ToString();
+            }
         }
+
     }
 }
