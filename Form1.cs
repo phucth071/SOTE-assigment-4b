@@ -89,13 +89,13 @@ namespace Buoi07_TinhToan3
       // Kiểm tra nếu số nhập vào vượt quá giới hạn của kiểu double
       if (!double.TryParse(txtSo1.Text, out so1))
       {
-          MessageBox.Show("Nhập vào số quá lớn!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show("Số thứ nhất không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
           txtSo1.Focus();
           return;
       }
       if (!double.TryParse(txtSo2.Text, out so2))
       {
-          MessageBox.Show("Nhập vào số quá lớn!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show("Số thứ nhất hai hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
           txtSo2.Focus();
           return;
       }
@@ -104,7 +104,16 @@ namespace Buoi07_TinhToan3
 			if (radCong.Checked) kq = so1 + so2;
 			else if (radTru.Checked) kq = so1 - so2;
 			else if (radNhan.Checked) kq = so1 * so2;
-			else if (radChia.Checked && so2 != 0) kq = so1 / so2;
+			else if (radChia.Checked)
+            {
+                if (so2 == 0)
+                {
+                    MessageBox.Show("Số chia phải khác 0");
+                    txtSo2.Focus();
+                    return;
+                }
+                kq = so1 / so2;
+            }
 			// Hiển thị kết quả
       if (double.IsInfinity(kq))
       {
