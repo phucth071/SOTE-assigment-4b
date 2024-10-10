@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Buoi07_TinhToan3
@@ -15,8 +16,8 @@ namespace Buoi07_TinhToan3
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			txtSo1.Text = txtSo2.Text = "0";
-			radCong.Checked = true;  
-      
+			radCong.Checked = true;
+
 			txtSo1.Leave += new EventHandler(TextBox_Leave);
 			txtSo2.Leave += new EventHandler(TextBox_Leave);
 
@@ -85,7 +86,7 @@ namespace Buoi07_TinhToan3
 		{
 			//lấy giá trị của 2 ô số
 			double so1, so2, kq = 0;
-      
+
 			// Kiểm tra nếu số nhập vào vượt quá giới hạn của kiểu double
 			if (!double.TryParse(txtSo1.Text, out so1))
 			{
@@ -98,36 +99,66 @@ namespace Buoi07_TinhToan3
 				MessageBox.Show("Số thứ nhất hai hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				txtSo2.Focus();
 				return;
-			}	
-      
+			}
+
 			//Thực hiện phép tính dựa vào phép toán được chọn
 			if (radCong.Checked) kq = so1 + so2;
 			else if (radTru.Checked) kq = so1 - so2;
-			else if (radNhan.Checked) kq = so1 * so2;
+			else if (radNhan.Checked)
+			{
+				kq = so1 * so2;
+                decimalNumber num1, num2, res = null;
+				if (TryParseVerySmallNumber(txtSo1.Text, out num1) && TryParseVerySmallNumber(txtSo2.Text, out num2))
+				{;
+					res = num1 * num2;
+				}
+				if (res != null)
+				{
+					txtKq.Text = res.ToString();
+					return;
+				}
+			}
 			else if (radChia.Checked)
-            {
-                if (so2 == 0)
-                {
-                    MessageBox.Show("Số chia phải khác 0");
-                    txtSo2.Focus();
-                    return;
-                }
-                kq = so1 / so2;
-            }
-			// Hiển thị kết quả
-			if (double.IsInfinity(kq))
 			{
-				MessageBox.Show("Kết quả vượt quá giới hạn tính toán!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				txtKq.Text = "∞";
+				if (so2 == 0)
+				{
+					MessageBox.Show("Số chia phải khác 0");
+					txtSo2.Focus();
+					return;
+				}
+				kq = so1 / so2;
 			}
-			else if (Math.Abs(kq) < 1e-308)
+				// Hiển thị kết quả
+				if (double.IsInfinity(kq))
+				{
+					MessageBox.Show("Kết quả vượt quá giới hạn tính toán!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					txtKq.Text = "∞";
+				}
+				else if (Math.Abs(kq) < 1e-308)
+				{
+					txtKq.Text = kq.ToString("0.0E0");
+				}
+				else
+				{
+					txtKq.Text = kq.ToString();
+				}
+
+			}
+
+			private bool TryParseVerySmallNumber(string input, out decimalNumber result)
 			{
-				txtKq.Text = kq.ToString("0.0E0");
+				result = null;
+				if (input.Contains("e"))
+				{
+					var parts = input.Split('e');
+					if (parts.Length == 2 && int.TryParse(parts[0], out int mantissa) && int.TryParse(parts[1], out int exponent))
+					{
+						result = new decimalNumber(mantissa, exponent);
+						return true;
+					}
+				}
+				return false;
 			}
-			else
-			{
-				txtKq.Text = kq.ToString();
-			}
+
 		}
 	}
-}
