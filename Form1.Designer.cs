@@ -132,7 +132,6 @@
             this.txtSo1.Size = new System.Drawing.Size(132, 30);
             this.txtSo1.TabIndex = 11;
             this.txtSo1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.txtSo1.TextChanged += new System.EventHandler(this.txtSo1_TextChanged);
             // 
             // label1
             // 
